@@ -166,3 +166,296 @@ func main() {
     fmt.Println(value, price, name, done) // -> 0 0.0 ""  false
 }
 ```
+
+### Naming conventions
+
+[Go specifications](https://go.dev/ref/spec#Keywords)
+
+```go
+package main
+ 
+//** COMMENTS **//
+ 
+// this is a single line comment
+ 
+/*
+ This is a block comment.
+ a := 10
+ fmt.Println(a)
+*/
+ 
+var name = "John Wick" // inline comment
+ 
+//** NAMING CONVENTIONS IN GO **//
+ 
+// Naming Conventions are important for code readability and maintainability.
+ 
+// use short, concise names especially in shorter scopes
+// common names for common types:
+var s string   //string
+var i int      //index
+var num int    //number
+var msg string //message
+var v string   //value
+var err error  //error value
+var done bool  //bool, has been done?
+ 
+// use mixedCase a.k.a camelCase instead of snake_case (variables and  functions)
+var maxValue = 100  // recommended (camelCase)
+var max_value = 100 // not recommended (snake_case)
+ 
+// recommended
+func writeToFile() {
+}
+ 
+// not recommended
+func write_to_file() {
+}
+ 
+// write acronyms in all caps
+var writeToDB = true // recommended
+var writeToDb = true // not recommended
+ 
+func main() {
+ 
+    // use fewer letters, don’t be too verbose especially in smaller scopes
+    var packetsReceived int // NOT OK, too verbose
+    var n int               // OK
+    _, _ = packetsReceived, n
+ 
+    // an uppercase first letter has special significance to go (it will be exported in other packages)
+}
+```
+
+### Package fmt
+
+[fmt](https://pkg.go.dev/fmt#Printf)
+
+```go
+package main
+ 
+// Package fmt implements formatted I/O with functions analogous to C's printf and scanf.
+// It's used mainly to print out to stdout
+import "fmt"
+ 
+func main() {
+ 
+    // fmt.Println() writes to standard output.
+    // spaces are always added between operands and a newline is appended.
+    fmt.Println("Hello Go World!") // => Hello Go World!
+ 
+    var name, age = "Andrei", 35
+    fmt.Println(name, "is", age, "years old.") // => Andrei is 35 years old.
+ 
+    //** fmt.Printf() **//
+ 
+    // fmt.Printf() prints out to stdout according to a format specifier called verb.
+    // It doesn't add a newline (\n)
+ 
+    // VERBS:
+    // %d -> decimal
+    // %f -> float
+    // %s -> string
+    // %q -> double-quoted string
+    // %v -> value (any)
+    // %#v -> a Go-syntax representation of the value
+    // %T -> value Type
+    // %t -> bool (true or false)
+    // %p -> pointer (address in base 16, with leading 0x)
+    // %c -> char (rune) represented by the corresponding Unicode code point
+ 
+    a, b, c := 10, 15.5, "Gophers"
+    grades := []int{10, 20, 30}
+ 
+    fmt.Printf("a is %d, b is %f, c is %s \n", a, b, c)    // => a is 10, b is 15.500000, c is Gophers
+    fmt.Printf("%q\n", c)                      // => "Gophers"
+    fmt.Printf("%v\n", grades)                 // => [10 20 30]
+    fmt.Printf("%#v\n", grades)                // => b is of type float64 and grades is of type []int
+    fmt.Printf("b is of type %T and grades is of type %T\n", b, grades) 
+    // => b is of type float64 and grades is of type []int
+    fmt.Printf("The address of a: %p\n", &a)    // => The address of a: 0xc000016128
+    fmt.Printf("%c and %c\n", 100, 51011)       // =>  d and 읃  (runes for code points 101 and 51011)
+ 
+    const pi float64 = 3.14159265359
+    fmt.Printf("pi is %.4f\n", pi) // => formatting with 4 decimal points
+ 
+    // %b -> base 2
+    // %x -> base 16
+    fmt.Printf("255 in base 2 is %b\n", 255)  //  => 255 in base 2 is 11111111
+    fmt.Printf("101 in base 16 is %x\n", 101) // => 101 in base 16 is 65
+ 
+    // fmt.Sprintf() returns a string. Uses the same verbs as fmt.Printf()
+    s := fmt.Sprintf("a is %d, b is %f, c is %s \n", a, b, c)
+    fmt.Println(s) // => a is 10, b is 15.500000, c is Gophers
+}
+```
+
+### Constants
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	const days int = 7
+
+	var i int
+	fmt.Println(i)
+
+	const pi = 3.14
+	fmt.Println(days, pi)
+
+	const a, b = 5, 0
+	// fmt.Println(a/b) -> error detected
+	fmt.Println(a, b)
+
+	const (
+		min1 = -500
+		min2 = -300
+		min3 = 100
+	)
+	fmt.Println(min1, min2, min3)
+
+	// group constant
+	const (
+		max1 = 100
+		max2
+		max3
+	)
+	fmt.Println(max1, max2, max3)
+
+}
+```
+
+### Untype constants
+
+[Constants](https://go.dev/blog/constants)
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// typed constant
+	const a float64 = 7.7
+	// untyped constant
+	const b = 6.6
+
+	const c = a * b
+	const name = "Mario" + "Lazzari"
+
+	fmt.Println(c, name)
+
+	// const x int = 5
+	// const y float64 = 7 * x -> error: type mismatched
+
+	const x = 5
+	const y = x * 2.2
+
+	fmt.Printf("%T\n", y)
+
+	const i int = x     // untyped x changes to int
+	const j float64 = x // untyped x changes to float
+	fmt.Printf("%T %T\n", i, j)
+
+}
+```
+
+### Iota
+
+```go
+package main
+ 
+import "fmt"
+ 
+func main() {
+    // To declare a constant and give it a name, we use the const keyword
+    // Constants need to be initialized when declared
+    const days int = 7 // typed constant
+    const pi = 3.14    // untyped constant
+    
+    // There are ONLY boolean constants, rune constants, integer constants, 
+    // floating-point constants, complex constants, and string constants.
+ 
+    // Declaring multiple (grouped) constants
+    const (
+        a         = 5   // untyped constant
+        b float64 = 0.1 // typed constant
+    )
+ 
+    const n, m int = 4, 5
+ 
+    const (
+        min1 = -500
+        max1 //gets its type and value form the previous constant. It's 500
+        max2 //in a grouped constants, a constant repeats the previous one -> 500
+    )
+ 
+    // CONSTANTS RULES
+ 
+    // 1. You cannot change a constant
+    const temp int = 100
+    // temp = 50 //compile-time error
+ 
+    // 2. You cannot initiate a constant at runtime (constants belong to compile-time)
+    // const power = math.Pow(2, 3) //error, functions calls belong to runtime
+ 
+    // 3. You cannot use a variable to initialize a constant
+    t := 5
+    // error, variables belong to runtime and you cannot initialize a const to runtime values
+    // const tc = t 
+    
+ 
+    // 4. You can use a function like len() to initialize a const if it has as argument
+    // a constant string literal (not a variable)
+    // a string literal is an untyped constant
+ 
+    const l1 = len("Hello") //ok
+ 
+    str := "Hello"
+    // const l2 = len(str) //error, str is a variable and belongs to runtime
+ 
+    _, _ = t, str
+ 
+    // UNTYPED CONSTANTS
+    const x = 5
+    const y float64 = 1.1
+ 
+    var v1 int = 5
+    var v2 float64 = 1.1
+ 
+    fmt.Println(x * y) 
+    // => 5.5, No Error because x is untyped and gets its type when its used first time (float64).
+    
+    // fmt.Println(v1 * v2)  
+    // => Error: invalid operation: v1 * v2 (mismatched types int and float64)
+    _, _ = v1, v2
+ 
+    // IOTA
+    // iota is number generator for constants which starts from zero 
+    // and is incremented by 1 automatically.
+ 
+    const (
+        c1 = iota
+        c2 = iota
+        c3 = iota
+    )
+    fmt.Println(c1, c2, c3) // => 0 1 2
+ 
+    const (
+        North = iota //by default 0
+        East         //omitting type and value means, repeating its type and value so East = iota = 1 (it increments by 1 automatically)
+        South        // -> 2
+        West         // -> 3
+    )
+ 
+    // Initializing the constants using a step:
+    const (
+        c11 = iota * 2 // -> 0
+        c22            // -> 2
+        c33            // -> 4
+    )
+}
+```
