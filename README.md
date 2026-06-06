@@ -801,3 +801,206 @@ func main() {
 ```
 
 ## Coding challeges: basics
+
+### Declare variables
+
+#### Declare variables: ex1
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Using the var keyword, declare 4 variables called a, b, c, d of type int, float64, bool and string.
+	var a int
+	var b float64
+	var c bool
+	var d string
+
+	// Using short declaration syntax declare and assign these values to variables x, y and z:
+	x := 20
+	y := 15.5
+	z := "Gopher!"
+
+	// Using fmt.Println() print out the values of a, b, c, d, x, y and z.
+	fmt.Println(a, b, c, d, y, x, z)
+}
+```
+
+#### Declare variables: ex2
+
+```go
+package main
+
+func main() {
+	// Declare a, b, c, d using a single var keyword (multiple variable declaration) for better readability.
+	var (
+		a int
+		b float64
+		c bool
+		d string
+	)
+
+	// Declare x, y and z on a single line -> multiple short declarations
+	x, y, z := 20, 15.5, "Gopher!"
+
+	// Remove the statement that prints out the variables. See the error!
+	//fmt.Println(a, b, c, d, y, x, z)
+
+	// Change the program to run without error using the blank identifier
+	_ = a
+	_ = b
+	_ = c
+	_ = d
+	_ = x
+	_ = y
+	_ = z
+}
+```
+
+#### Declare variables: ex3
+
+```go
+package main
+
+func main() {
+	var a float64 = 7.1
+
+	x, y := true, 3.7
+
+	// Try to identify the errors, change the code and run the program without errors.
+	// a, x := 5.5, false
+	a, x = 5.5, false
+
+	_, _, _ = a, x, y
+}
+```
+
+#### Declare variables: ex4
+
+```go
+package main
+
+import "fmt"
+
+// Try to identify the errors, change the code and run the program without errors.
+// version := "3.1"
+var version = "3.1"
+
+func main() {
+	//name := 'Golang'
+	name := "Golang"
+	fmt.Println(name)
+}
+```
+
+### Constants
+
+#### Constants ex1
+
+```go
+package main
+
+func main() {
+	// Using the const keyword declare and initialize the following constants:
+
+	// 1. daysWeek with value 7
+	const daysWeek = 7
+
+	// 2. lightSpeed with value 299792458
+	const lightSpeed = 299792458
+
+	// 3. pi with value 3.14159
+	const pi = 3.14159
+}
+````
+
+#### Constants ex2
+
+```go
+package main
+
+func main() {
+	// Change the code from the previous exercise and declare all 3 constants as grouped constants.
+	const (
+		daysWeek   = 7
+		lightSpeed = 299792458
+		pi         = 3.14159
+	)
+}
+```
+
+#### Constants ex3
+
+```go
+package main
+
+import "fmt"
+
+// Calculate how many seconds are in a year.
+func main() {
+	// Declare secPerDay constant and initialize it to the number of seconds in a day
+	const secPerDay = 60 * 60 * 24
+	// Declare daysYear constant and initialize it to 365
+	const daysYear = 365
+	// Use fmt.Printf() to print out the total number of seconds in a year.
+	fmt.Printf("%d\n", secPerDay*daysYear)
+}
+```
+
+#### Constants ex4
+
+```go
+package main
+
+func main() {
+	const x int = 10
+
+	// declaring a constant of type slice int ([]int)
+	// const m = []int{1: 3, 4: 5, 6: 8}
+	m := []int{1, 3, 4, 5, 6, 8}
+
+	_ = m
+}
+```
+
+#### Constants ex5
+
+```go
+package main
+
+import "math"
+
+// Try to identify the errors,
+func main() {
+	const a int = 7
+	const b float64 = 5.6
+	// const c = a * b
+	const c = float64(a) * b
+
+	// x := 8
+	const x = 8
+	const xc int = x
+
+	// const noIPv6 = math.Pow(2, 128)
+	noIPv6 := math.Pow(2, 128)
+	_ = noIPv6
+}
+```
+
+#### Constants ex6
+
+```go
+package main
+
+// Using Iota declare the following months of the year: Jun, Jul and Aug
+func main() {
+	//Jun, Jul and Aug are constant and their value is 6, 7 and 8
+	const (
+		Jun = iota + 6
+		Jul
+		Aug
+	)
+}
+```
