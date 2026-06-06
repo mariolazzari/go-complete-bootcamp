@@ -1167,3 +1167,70 @@ func main() {
 	fmt.Println(kmBerlinToParis)
 }
 ```
+
+## Program flow
+
+### if
+
+```go
+package main
+ 
+import "fmt"
+ 
+func main() {
+ 
+    // if condition_that_evaluates_to_boolean{
+    //      perform action1
+    // }else if condition_that_evaluates_to_boolean{
+    //      perform action2
+    // }else{
+    //      perform action3
+    // }
+ 
+    price, inStock := 100, true
+ 
+    if price >= 80 { // parenthesis are no required to enclose the testing condition
+        fmt.Println("Too Expensive")
+    }
+ 
+    if price <= 100 && inStock == true { //the same with: if price <= 100 && inStock { }
+        fmt.Println("Buy it!")
+    }
+ 
+    // In Go there is not such a thing like the Truthiness of a variable.
+    // Error:
+    // if price {
+    //  fmt.Println("We have price!")
+    // }
+ 
+    // only one if branch will be executed
+    if price < 100 {
+        fmt.Println("It's cheap!")
+    } else if price == 100 {
+        fmt.Println("On the edge")
+    } else { //executed only once if all the if branches are false (it's optional)
+        fmt.Println("It's Expensive!")
+    }
+}
+```
+
+### Command line args
+
+```go
+package main
+ 
+import (
+    "fmt"
+    "os"
+)
+ 
+func main() {
+    fmt.Println("os.Args:", os.Args) // os.Args is slice of strings ([]string)
+ 
+    // accessing command line arguments using indexes
+    fmt.Println("Path:", os.Args[0])
+    fmt.Println("1st Argument:", os.Args[1])
+    fmt.Println("2nd Argument:", os.Args[2])
+    fmt.Println("No. of items inside os.Args:", len(os.Args))
+}
+```
