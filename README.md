@@ -1091,3 +1091,79 @@ func main() {
 	fmt.Println(b)
 }
 ```
+
+### Named types
+
+#### Named types ex1
+
+```go
+package main
+
+import "fmt"
+
+// Declare a new type type called duration. Have the underlying type be an int.
+type duration int
+
+// Declare a variable of the new type called hour using the var keyword
+var hour duration
+
+func main() {
+	// print out the value of the variable hour
+	fmt.Printf("%d\n", hour)
+	// print out the type of the variable hour
+	fmt.Printf("%T\n", hour)
+	// assign 3600 to the variable hour using the  = operator
+	hour = 3600
+	// print out the value of hour
+	fmt.Printf("%d\n", hour)
+}
+```
+
+#### Named types ex2
+
+```go
+package main
+
+import "fmt"
+
+type duration int
+
+// There are some errors in the following
+func main() {
+	var hour duration = 3600
+	minute := 60
+	// fmt.Println(hour != minute)
+	fmt.Println(hour != duration(minute))
+}
+```
+
+#### Named types ex3
+
+```go
+package main
+
+import "fmt"
+
+// Declare two defined types called mile and kilometer.
+// Have the underlying type be an float64.
+type mile float64
+type kilometer float64
+
+// Declare a constant called m2km equals 1.609  ( 1mile=1.609km)
+const m2km = 1.609
+
+func main() {
+	// declare a variable called mileBerlinToParis of type mile with value 655.3
+	var mileBerlinToParis mile = 6555.3
+
+	// declare a variable called kmBerlinToParis of type kilometer
+	var kmBerlinToParis kilometer
+
+	// calculate the distance between Berlin and Paris in km by multiplying mileBerlinToParis and m2km.
+	// Assign the result to kmBerlinToParis
+	kmBerlinToParis = kilometer(mileBerlinToParis * m2km)
+
+	// print out the distance in km between Berlin and Paris
+	fmt.Println(kmBerlinToParis)
+}
+```
