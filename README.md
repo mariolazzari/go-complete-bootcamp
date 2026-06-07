@@ -1455,3 +1455,174 @@ func main() {
     }
 }
 ```
+
+### Scopes
+
+```go
+package main
+ 
+// import statements are file scoped
+import (
+    "fmt"
+ 
+    // import "fmt" -> error, within the same scope, unique names
+ 
+    // importing as another name (alias) is permitted
+    f "fmt"
+)
+ 
+// variables or constant declared outside any function are package scoped
+const done = false
+ 
+func main() { // package scoped
+ 
+    // block scoped: visible until the end of the block "}"
+    var task = "Running:"
+    fmt.Println(task, done) // => Running: false (this is done from package scope)
+    f.Println("Bye bye!")
+ 
+    // names must be unique only within the same scope
+    const done = true                        // local scoped
+    fmt.Printf("done in main(): %v\n", done) // => done in main(): true
+    f1()
+}
+ 
+func f1() {
+    fmt.Printf("done in f(): %v\n", done) //this is done from package scope
+}
+```
+
+## Flow exercises
+
+### Flow ex1
+
+```go
+package main
+
+import "fmt"
+
+// Using a for loop and an if statement print out all the numbers between 1 and 50 that divisible by 7.
+func main() {
+	for i := 1; i <= 50; i++ {
+		if i%7 == 0 {
+			fmt.Println(i)
+		}
+	}
+}
+```
+
+### Flow ex2
+
+```go
+package main
+
+import "fmt"
+
+// Change the code from the previous exercise and use the continue statement to print out all the numbers divisible by 7 between 1 and 50.
+func main() {
+	for i := 1; i <= 50; i++ {
+		if i%7 != 0 {
+			continue
+		}
+		fmt.Println(i)
+	}
+}
+```
+
+### Flow ex3
+
+```go
+package main
+
+import "fmt"
+
+// Change the code from the previous exercise and use the break statement to print out only the first 3 numbers divisible by 7 between 1 and 50.
+func main() {
+	j := 1
+	for i := 1; i <= 50; i++ {
+		if i%7 != 0 {
+			continue
+		}
+		fmt.Println(i)
+
+		j++
+		if j == 4 {
+			break
+		}
+	}
+}
+```
+
+### Flow ex4
+
+```go
+package main
+
+import "fmt"
+
+// Using a for loop, an if statement and the logical and operator print out all the numbers between 1 and 500 that divisible both by 7 and 5.
+func main() {
+	for i := 1; i <= 50; i++ {
+		if i%5 != 0 && i%7 != 0 {
+			continue
+		}
+		fmt.Println(i)
+	}
+}
+```
+
+### Flow ex5
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+// Using a for loop print out all the years from your birthday to the current year.
+// Use a variant of for loop where the post statement is moved inside the for block of code.
+func main() {
+	year := 1975
+	for year <= time.Now().Year() {
+		fmt.Println(year)
+		year++
+	}
+}
+```
+
+### Flow ex6
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	age := -9
+	if age < 0 || age > 100 {
+		fmt.Println("Invalid Age")
+	} else if age < 18 {
+		fmt.Println("You are minor!")
+	} else if age == 18 {
+		fmt.Println("Congratulations! You've just become major!")
+	} else {
+		fmt.Println("You are major!")
+	}
+
+	// Change the code and use a switch statement instead of an if statement.
+	switch {
+	case age < 0 || age > 100:
+		fmt.Println("Invalid Age")
+	case age < 18:
+		fmt.Println("You are minor!")
+	case age == 18:
+		fmt.Println("Congratulations! You've just become major!")
+	default:
+		fmt.Println("You are major!")
+	}
+}
+```
+
+## Arrays
