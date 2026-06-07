@@ -1350,3 +1350,108 @@ func main() {
     fmt.Println("Just a message after the for loop")
 }
 ```
+
+### Labels
+
+```go
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+    //** LABEL STATEMENT **//
+ 
+    // declaring a variable
+    // there is no conflict name between variable and label
+    outer := 19  
+    _ = outer
+ 
+    // declaring two arrays
+    people := [5]string{"Helen", "Mark", "Brenda", "Antonio", "Michael"}
+    friends := [2]string{"Mark", "Marry"}
+ 
+    // searching for a single friend in a list of people.
+    
+outer: //label, it doesn't conflict with other names
+    // iterating over the array.
+    for index, name := range people {  // range returns both the index and the elements of the array one by one
+        for _, friend := range friends { //iterating over the second array
+            if name == friend {
+                fmt.Printf("FOUND A FRIEND: %q at index %d\n", friend, index)
+                break outer //breaking outside the outer loop which terminates
+            }
+        }
+    }
+ 
+    fmt.Println("Next instruction after the break.")
+ 
+ 
+    // **GOTO STATEMENT **//
+    
+    //the following piece of code creates a loop like a for statement does
+    i := 0
+loop: // label
+    if i < 5 {
+        fmt.Println(i)
+        i++
+        goto loop
+    }
+ 
+    //  goto todo //ERROR it's not permitted to jump over the declaration of x
+    //  x := 5
+    // todo:
+    //  fmt.Println("something here")
+}
+```
+
+### Switch
+
+```go
+package main
+ 
+import "fmt"
+ 
+func main() {
+ 
+    language := "golang"
+ 
+    switch language {
+    case "Python": //values must be comparable (compare string to string)
+        fmt.Println("You are learning Python! You don't use { } but indentation !! ")
+        // an implicit break is added here
+    case "Go", "golang": //compare language with "Go" OR "golang"
+        fmt.Println("Good, Go for Go!. You are using {}!")
+    default:
+        // the default clause the equivalent of the else clause of an if statement
+        // and gets executed if no testing condition is true.
+        fmt.Println("Any other programming language is a good start!")
+    }
+ 
+    n := 5
+    // comparing the result of an expression which is bool to another bool value
+    switch true {
+    case n%2 == 0:
+        fmt.Println("Even!")
+    case n%2 != 0:
+        fmt.Println("Odd!")
+    default:
+        fmt.Println("Never here!")
+    }
+ 
+    //** Switch simple statement **//
+ 
+    // Syntax: statement (n:=10), semicolon and a switch condition
+    //(true in this case, we are comparing boolean expressions that return true)
+    // we can remove the word "true" because it's the default
+    switch n := 10; true {
+    case n > 0:
+        fmt.Println("Positive")
+    case n < 0:
+        fmt.Println("Negative")
+    default:
+        fmt.Println("Zero")
+    }
+}
+```
