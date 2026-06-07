@@ -1626,3 +1626,209 @@ func main() {
 ```
 
 ## Arrays
+
+### Intro to arrays
+
+```go
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+ 
+    // declaring an array with four elements of type int
+    var numbers [4]int
+ 
+    // array zero value is zeroed value elements
+    fmt.Printf("%v\n", numbers)  // -> [0 0 0 0]
+    fmt.Printf("%#v\n", numbers) // -> [4]int{0, 0, 0, 0}
+ 
+    // declaring an array and initialize it using an array literal
+    var a1 = [4]float64{}                           //initialized with defaults (0)
+    var a2 = [3]int{5, -3, 5}                       //initialized with the given values
+    a3 := [4]string{"Dan", "Diana", "Paul", "John"} //short declaration syntax
+    a4 := [4]string{"x", "y"}                       //initializing only the first 2 elements
+ 
+    // the ellipsis operator (...) finds out automatically the length of the array
+    a5 := [...]int{1, 4, 5}
+    fmt.Println("The length of a5 is: ", len(a5)) // len is 3
+ 
+    // declare an array on multiple lines for better readability
+    a6 := [...]int{1,
+        2,
+        3,
+    } //the ending comma is mandatory when initializing the array on multiple lines and the closing curly brace is on its own line
+ 
+    _, _, _, _, _, _ = a1, a2, a3, a4, a5, a6
+ 
+    // changing an array
+    // we can't add or remove elements from the array (it's fixed length)
+    numbers[0] = 7              //changing first element (index 0)
+    fmt.Printf("%v\n", numbers) // -> [7 0 0 0]
+ 
+    // compile-time error
+    // numbers[5] = 8  // invalid array index 5 (out of bounds for 4-element array)
+ 
+    // getting an element
+    x := numbers[0]
+    fmt.Println("x is ", x) // => x is  7
+ 
+    // iterating over an array (2-ways)
+    for i, v := range numbers { // range is a language keyword used for iteration
+        fmt.Println("index:", i, "value: ", v)
+ 
+    }
+ 
+    // iterating over an array (C/C++, Java Style)
+    for i := 0; i < len(numbers); i++ {
+        fmt.Println("index:", i, "value: ", numbers[i])
+    }
+ 
+    // declaring a multi-dimensional arrays (array of arrays or matrix)
+    balances := [2][3]int{
+        [3]int{5, 6, 7}, //[3]int is optional
+        {8, 9, 10},
+    }
+ 
+    for _, arr := range balances {
+        for _, value := range arr {
+            fmt.Printf("%d ", value)
+        }
+        fmt.Println("")
+    }
+ 
+    //  = operator creates a copy of an array.
+    // the arrays are not connected and are saved in different memory locations
+    m := [3]int{1, 2, 3}
+    n := m //n is a copy of m
+ 
+    fmt.Println("n is equal to m: ", n == m) // => true
+    m[0] = -1                                //only m is modified
+    fmt.Println("n is equal to m: ", n == m) // => false
+ 
+}
+```
+
+### Keyed elements
+
+```go
+package main
+ 
+import "fmt"
+ 
+func main() {
+ 
+    // each key corresponds to an index of the array
+    grades := [3]int{ //the keyed elements can be in any order
+        1: 10,
+        0: 5,
+        2: 7,
+    }
+    fmt.Println(grades) // -> [5 10 7]
+ 
+    accounts := [3]int{
+        2: 50,
+    }
+    fmt.Println(accounts) //[0 0 50]
+ 
+    names := [...]string{
+        4: "Dan",
+    }
+    fmt.Println(len(names)) // -> 5
+ 
+    // un unkeyed element gets its index from the last keyed element
+    cities := [...]string{
+        5:        "Paris",
+        "London", // this is at index 6
+        1:        "NYC",
+    }
+    fmt.Printf("%#v\n", cities) // -> [7]string{"", "NYC", "", "", "", "Paris", "London"}
+ 
+    weekend := [7]bool{5: true, 6: true}
+    fmt.Println(weekend) // => [false false false false false true true]
+}
+```
+
+### Arrays exercises
+
+#### Array ex1
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Using the var keyword, declare an array called cities with 2 elements of type string. Don't initialize the array.
+	var cities [2]string
+	// Print out the cities array and notice the value of its elements.
+	fmt.Println(cities)
+
+	// Declare an array called grades of type [3]float64 and initialize only the first 2 elements using an array literal.
+	var grades [3]float64 = [3]float64{10, 20}
+	// Print out the grades array and notice the value of its elements.
+	fmt.Println(grades)
+
+	// Declare an array called taskDone using the ellipsis operator. The elements are of type bool. Print out taskDone.
+	var taskDone = [...]bool{true, false, true}
+	fmt.Println(taskDone)
+
+	// Iterate over the array called cities using the classical for loop syntax and the len function and print out element by element.
+	for i := 0; i < len(cities); i++ {
+		fmt.Println(cities[i])
+	}
+
+	// Iterate over grades using the range keyword and print out element by element.
+	for _, grade := range grades {
+		fmt.Println(grade)
+	}
+}
+```
+
+#### Array ex2
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Consider the following array declaration:
+	nums := [...]int{30, -1, -6, 90, -6}
+
+	// Write a Go program that counts the number of positive even numbers in the array.
+	count := 0
+	for _, n := range nums {
+		if n > 0 && n%2 == 0 {
+			count++
+		}
+	}
+	fmt.Printf("Positive even numbers: %d\n", count)
+}
+```
+
+#### Array ex3
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	myArray := [3]float64{1.2, 5.6}
+
+	myArray[2] = 6
+
+	a := 10
+
+	// There are some errors in the following
+	// myArray[0] = a
+	myArray[0] = float64(a)
+	// myArray[3] = 10.10
+	myArray[2] = 10.10
+
+	fmt.Println(myArray)
+}
+```
