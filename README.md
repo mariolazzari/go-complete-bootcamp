@@ -173,23 +173,23 @@ func main() {
 
 ```go
 package main
- 
+
 //** COMMENTS **//
- 
+
 // this is a single line comment
- 
+
 /*
  This is a block comment.
  a := 10
  fmt.Println(a)
 */
- 
+
 var name = "John Wick" // inline comment
- 
+
 //** NAMING CONVENTIONS IN GO **//
- 
+
 // Naming Conventions are important for code readability and maintainability.
- 
+
 // use short, concise names especially in shorter scopes
 // common names for common types:
 var s string   //string
@@ -199,30 +199,30 @@ var msg string //message
 var v string   //value
 var err error  //error value
 var done bool  //bool, has been done?
- 
+
 // use mixedCase a.k.a camelCase instead of snake_case (variables and  functions)
 var maxValue = 100  // recommended (camelCase)
 var max_value = 100 // not recommended (snake_case)
- 
+
 // recommended
 func writeToFile() {
 }
- 
+
 // not recommended
 func write_to_file() {
 }
- 
+
 // write acronyms in all caps
 var writeToDB = true // recommended
 var writeToDb = true // not recommended
- 
+
 func main() {
- 
+
     // use fewer letters, don’t be too verbose especially in smaller scopes
     var packetsReceived int // NOT OK, too verbose
     var n int               // OK
     _, _ = packetsReceived, n
- 
+
     // an uppercase first letter has special significance to go (it will be exported in other packages)
 }
 ```
@@ -233,25 +233,25 @@ func main() {
 
 ```go
 package main
- 
+
 // Package fmt implements formatted I/O with functions analogous to C's printf and scanf.
 // It's used mainly to print out to stdout
 import "fmt"
- 
+
 func main() {
- 
+
     // fmt.Println() writes to standard output.
     // spaces are always added between operands and a newline is appended.
     fmt.Println("Hello Go World!") // => Hello Go World!
- 
+
     var name, age = "Andrei", 35
     fmt.Println(name, "is", age, "years old.") // => Andrei is 35 years old.
- 
+
     //** fmt.Printf() **//
- 
+
     // fmt.Printf() prints out to stdout according to a format specifier called verb.
     // It doesn't add a newline (\n)
- 
+
     // VERBS:
     // %d -> decimal
     // %f -> float
@@ -263,27 +263,27 @@ func main() {
     // %t -> bool (true or false)
     // %p -> pointer (address in base 16, with leading 0x)
     // %c -> char (rune) represented by the corresponding Unicode code point
- 
+
     a, b, c := 10, 15.5, "Gophers"
     grades := []int{10, 20, 30}
- 
+
     fmt.Printf("a is %d, b is %f, c is %s \n", a, b, c)    // => a is 10, b is 15.500000, c is Gophers
     fmt.Printf("%q\n", c)                      // => "Gophers"
     fmt.Printf("%v\n", grades)                 // => [10 20 30]
     fmt.Printf("%#v\n", grades)                // => b is of type float64 and grades is of type []int
-    fmt.Printf("b is of type %T and grades is of type %T\n", b, grades) 
+    fmt.Printf("b is of type %T and grades is of type %T\n", b, grades)
     // => b is of type float64 and grades is of type []int
     fmt.Printf("The address of a: %p\n", &a)    // => The address of a: 0xc000016128
     fmt.Printf("%c and %c\n", 100, 51011)       // =>  d and 읃  (runes for code points 101 and 51011)
- 
+
     const pi float64 = 3.14159265359
     fmt.Printf("pi is %.4f\n", pi) // => formatting with 4 decimal points
- 
+
     // %b -> base 2
     // %x -> base 16
     fmt.Printf("255 in base 2 is %b\n", 255)  //  => 255 in base 2 is 11111111
     fmt.Printf("101 in base 16 is %x\n", 101) // => 101 in base 16 is 65
- 
+
     // fmt.Sprintf() returns a string. Uses the same verbs as fmt.Printf()
     s := fmt.Sprintf("a is %d, b is %f, c is %s \n", a, b, c)
     fmt.Println(s) // => a is 10, b is 15.500000, c is Gophers
@@ -367,90 +367,90 @@ func main() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
     // To declare a constant and give it a name, we use the const keyword
     // Constants need to be initialized when declared
     const days int = 7 // typed constant
     const pi = 3.14    // untyped constant
-    
-    // There are ONLY boolean constants, rune constants, integer constants, 
+
+    // There are ONLY boolean constants, rune constants, integer constants,
     // floating-point constants, complex constants, and string constants.
- 
+
     // Declaring multiple (grouped) constants
     const (
         a         = 5   // untyped constant
         b float64 = 0.1 // typed constant
     )
- 
+
     const n, m int = 4, 5
- 
+
     const (
         min1 = -500
         max1 //gets its type and value form the previous constant. It's 500
         max2 //in a grouped constants, a constant repeats the previous one -> 500
     )
- 
+
     // CONSTANTS RULES
- 
+
     // 1. You cannot change a constant
     const temp int = 100
     // temp = 50 //compile-time error
- 
+
     // 2. You cannot initiate a constant at runtime (constants belong to compile-time)
     // const power = math.Pow(2, 3) //error, functions calls belong to runtime
- 
+
     // 3. You cannot use a variable to initialize a constant
     t := 5
     // error, variables belong to runtime and you cannot initialize a const to runtime values
-    // const tc = t 
-    
- 
+    // const tc = t
+
+
     // 4. You can use a function like len() to initialize a const if it has as argument
     // a constant string literal (not a variable)
     // a string literal is an untyped constant
- 
+
     const l1 = len("Hello") //ok
- 
+
     str := "Hello"
     // const l2 = len(str) //error, str is a variable and belongs to runtime
- 
+
     _, _ = t, str
- 
+
     // UNTYPED CONSTANTS
     const x = 5
     const y float64 = 1.1
- 
+
     var v1 int = 5
     var v2 float64 = 1.1
- 
-    fmt.Println(x * y) 
+
+    fmt.Println(x * y)
     // => 5.5, No Error because x is untyped and gets its type when its used first time (float64).
-    
-    // fmt.Println(v1 * v2)  
+
+    // fmt.Println(v1 * v2)
     // => Error: invalid operation: v1 * v2 (mismatched types int and float64)
     _, _ = v1, v2
- 
+
     // IOTA
-    // iota is number generator for constants which starts from zero 
+    // iota is number generator for constants which starts from zero
     // and is incremented by 1 automatically.
- 
+
     const (
         c1 = iota
         c2 = iota
         c3 = iota
     )
     fmt.Println(c1, c2, c3) // => 0 1 2
- 
+
     const (
         North = iota //by default 0
         East         //omitting type and value means, repeating its type and value so East = iota = 1 (it increments by 1 automatically)
         South        // -> 2
         West         // -> 3
     )
- 
+
     // Initializing the constants using a step:
     const (
         c11 = iota * 2 // -> 0
@@ -464,78 +464,78 @@ func main() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
- 
+
     //** NUMERIC TYPES **//
- 
+
     // uint8      the set of all unsigned  8-bit integers (0 to 255)
     // uint16      the set of all unsigned 16-bit integers (0 to 65535)
     // uint32      the set of all unsigned 32-bit integers (0 to 4294967295)
     // uint64      the set of all unsigned 64-bit integers (0 to 18446744073709551615)
- 
+
     // int8        the set of all signed  8-bit integers (-128 to 127)
     // int16       the set of all signed 16-bit integers (-32768 to 32767)
     // int32       the set of all signed 32-bit integers (-2147483648 to 2147483647)
     // int64       the set of all signed 64-bit integers (-9223372036854775808 to 9223372036854775807)
- 
+
     // uint     either 32 or 64 bits
     // int      same size as uint
- 
+
     // float32     the set of all IEEE-754 32-bit floating-point numbers
     // float64     the set of all IEEE-754 64-bit floating-point numbers
     // complex64   the set of all complex numbers with float32 real and imaginary parts
     // complex128  the set of all complex numbers with float64 real and imaginary parts
- 
+
     // byte        alias for uint8
     // rune        alias for int32
- 
+
     //int type
     var i1 int8 = -128     //min value
     fmt.Printf("%T\n", i1) // => int8
- 
+
     var i2 uint16 = 65535  //max value
     fmt.Printf("%T\n", i2) // => int16
- 
+
     var i3 int64 = -324_567_345  // underscores are used to write large numbers for a better readability
     fmt.Printf("%T\n", i3)       // => int64
     fmt.Printf("i3 is %d\n", i3) // => i3 is -324567345 (underscores are ignored)
- 
+
     //float64 type
     var f1, f2, f3 float64 = 1.1, -.2, 5. // trailing and leading zeros can be ignored
     fmt.Printf("%T %T %T\n", f1, f2, f3)
- 
+
     //rune type
     var r rune = 'f'
     fmt.Printf("%T\n", r) // => int32 (rune is an alias to int32)
     fmt.Printf("%x\n", r) // => 66,  the hexadecimal ascii code for 'f'
     fmt.Printf("%c\n", r) // => f
- 
+
     //bool type
     var b bool = true
     fmt.Printf("%T\n", b) // => bool
- 
+
     //string type
     var s string = "Hello Go!"
     fmt.Printf("%T\n", s) // => string
- 
+
     //array type
     var numbers = [4]int{4, 5, -9, 100}
     fmt.Printf("%T\n", numbers) // =>  [4]int
- 
+
     //slice type
     var cities = []string{"London", "Bucharest", "Tokyo", "New York"}
     fmt.Printf("%T\n", cities) // => []string
- 
+
     //map type
     balances := map[string]float64{
         "USD": 233.11,
         "EUR": 555.11,
     }
     fmt.Printf("%T\n", balances) // => map[string]float64
- 
+
     //struct type
     type Person struct {
         name string
@@ -543,17 +543,17 @@ func main() {
     }
     var you Person
     fmt.Printf("%T\n", you) // => main.Person
- 
+
     //pointer type
     var x int = 2
     ptr := &x                                                 // pointer to int
     fmt.Printf("ptr is of type %T with value %v\n", ptr, ptr) // => ptr is of type *int with value 0xc000016168
- 
+
     //function type
     fmt.Printf("%T\n", f) // => func()
- 
+
 }
- 
+
 func f() {
 }
 ```
@@ -562,12 +562,12 @@ func f() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
     a, b := 10, 5.5
- 
+
     //** ARITHMETIC OPERATORS **//
     //  +       sum
     // -        difference
@@ -575,24 +575,24 @@ func main() {
     // /        quotient
     // %        remainder
     // there is no power operator in Go. Use math.Pow(a, b) for raising to a power.
- 
+
     fmt.Println(a + 5)   // => 15
     fmt.Println(3.1 - b) // => -2.4
     fmt.Println(a * a)   // => 100
     fmt.Println(a / a)   // => 1
     fmt.Println(11 / 5)  // => 2
- 
+
     // Go is a Strong Typed Language
     // fmt.Println(a * b)       // =>  invalid operation: a * b (mismatched types int and float64)
     fmt.Println(a * int(b))     // => 50
     fmt.Println(float64(a) * b) // => 55
- 
+
     // IncDec Statements
     // The "++" and "--" statements increment or decrement their operands by the untyped constant 1.
     x := 10
     x++ // x is 11. Same as: x += 1
     x-- // x is 10. Same as: x -= 1
- 
+
     //** ASSIGNMENT OPERATORS **//
     //  =   (simple assignment)
     // +=   (increment assignment)
@@ -600,14 +600,14 @@ func main() {
     // *=   (multiplication assignment)
     // /=   (division assignment)
     // %=   (modulus assignment)
- 
+
     a = 10
     a += 2 // => a is 12
     a -= 3 // => a is 9
     a *= 2 // => a is 18
     a /= 3 // => a is 6
     a %= 5 // => a is 1
- 
+
     //** COMPARISON OPERATORS **//
     //  ==      equal values
     // !=       not equal
@@ -615,23 +615,23 @@ func main() {
     // <        left operand is less than right operand
     // >=       left operand is greater than or equal to right operand
     // <=       left operand is less than or equal to right operand
- 
+
     fmt.Println(5 == 6)   // => false
     fmt.Println(5 != 6)   // => true
     fmt.Println(10 > 10)  // => false
     fmt.Println(10 >= 10) // => true
     fmt.Println(5 < 5)    // => false
     fmt.Println(5 <= 5)   // => true
- 
+
     //** LOGICAL OPERATORS **//
     // &&       logical and
     // ||       logical or
     // !        logical negation
- 
+
     fmt.Println(0 < 2 && 4 > 1) // => true
     fmt.Println(1 > 5 || 4 > 5) // => false
     fmt.Println(!(1 > 2))       // => true
- 
+
 }
 ```
 
@@ -668,55 +668,55 @@ func main() {
 
 ```go
 package main
- 
+
 import (
     "fmt"
     "strconv"
 )
- 
+
 func main() {
- 
+
     var x = 3   //int type
     var y = 3.2 //float type
- 
+
     // x = x * y //compile error ->  mismatched types
- 
+
     x = x * int(y) // converting float64 to int
     fmt.Println(x) // => 9
- 
+
     y = float64(x) * y //converting int to float64
     fmt.Println(y)     // => 28.8
- 
+
     x = int(float64(x) * y)
     fmt.Println(x) // => 259
- 
+
     //In Go types with different names are different types.
     var a int = 5   // same size as int64 or int32 (platform specific)
     var b int64 = 2 // int and int64 are not the same type
- 
+
     // a = b // error: cannot use b (type int64) as type int in assignment
     a = int(b) // converting int64 to int (explicit conversion required)
- 
+
     // preventing unused variable error
     _ = a
- 
+
     //** CONVERTING NUMBERS TO STRINGS AND STRINGS TO NUMBERS **//
- 
+
     s := string(99)            // int to rune (Unicode code point)
     fmt.Println(s)             // => 99, the ascii code for symbol c
     fmt.Println(string(34234)) // => 34234 is the unicode code point for 薺
- 
+
     // we cannot convert a float to a string similar to an int to a string
     // s1 := string(65.1) // error
- 
+
     // converting float to string
     var myStr = fmt.Sprintf("%f", 5.12)
     fmt.Println(myStr) // => 5.120000
- 
+
     // converting int to string
     var myStr1 = fmt.Sprintf("%d", 34234)
     fmt.Println(myStr1) // => 34234
- 
+
     // converting string to float
     var result, err = strconv.ParseFloat("3.142", 64)
     if err == nil {
@@ -724,7 +724,7 @@ func main() {
     } else {
         fmt.Println("Cannot convert to float64!")
     }
- 
+
     // Atoi(string to int) and Itoa(int to string).
     i, err := strconv.Atoi("-50")
     s = strconv.Itoa(20)
@@ -737,34 +737,34 @@ func main() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 type age int        //new type, int is the underlying type
 type oldAge age     //new type, int (not age) is the underlying type
 type veryOldAge age //new type, int (not age) is the underlying type
- 
+
 func main() {
- 
+
     // new type speed (underlying type uint)
     type speed uint
- 
+
     // s1, s2 of type speed
     var s1 speed = 10
     var s2 speed = 20
- 
+
     // performing operations with the new types
     fmt.Println(s2 - s1) // -> 10
- 
+
     // uint and speed are different types (they have different names)
     var x uint
- 
+
     // x = s1  //error different types
- 
+
     // correct
     x = uint(s1)
     _ = x
- 
+
     // correct
     var s3 speed = speed(x)
     _ = s3
@@ -775,26 +775,26 @@ func main() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
- 
+
     // declaring a variable of type uint8
     var a uint8 = 10
     var b byte // byte is an alias to uit8
- 
+
     // even though they have different names, byte and uit8 are the same type because they are aliases
     b = a // no error
     _ = b
- 
+
     // declaring a new alias named second for uint
     // type alias_name = type_name
     type second = uint
- 
+
     var hour second = 3600
     fmt.Printf("hour type: %T\n", hour) // => hour type: uint
- 
+
     //no need to convert operations (same type)
     fmt.Printf("Minutes in an hour: %d\n", hour/60) // => Minutes in an hour: 60
 }
@@ -914,7 +914,7 @@ func main() {
 	// 3. pi with value 3.14159
 	const pi = 3.14159
 }
-````
+```
 
 #### Constants ex2
 
@@ -1174,11 +1174,11 @@ func main() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
- 
+
     // if condition_that_evaluates_to_boolean{
     //      perform action1
     // }else if condition_that_evaluates_to_boolean{
@@ -1186,23 +1186,23 @@ func main() {
     // }else{
     //      perform action3
     // }
- 
+
     price, inStock := 100, true
- 
+
     if price >= 80 { // parenthesis are no required to enclose the testing condition
         fmt.Println("Too Expensive")
     }
- 
+
     if price <= 100 && inStock == true { //the same with: if price <= 100 && inStock { }
         fmt.Println("Buy it!")
     }
- 
+
     // In Go there is not such a thing like the Truthiness of a variable.
     // Error:
     // if price {
     //  fmt.Println("We have price!")
     // }
- 
+
     // only one if branch will be executed
     if price < 100 {
         fmt.Println("It's cheap!")
@@ -1218,15 +1218,15 @@ func main() {
 
 ```go
 package main
- 
+
 import (
     "fmt"
     "os"
 )
- 
+
 func main() {
     fmt.Println("os.Args:", os.Args) // os.Args is slice of strings ([]string)
- 
+
     // accessing command line arguments using indexes
     fmt.Println("Path:", os.Args[0])
     fmt.Println("1st Argument:", os.Args[1])
@@ -1239,24 +1239,24 @@ func main() {
 
 ```go
 package main
- 
+
 import (
     "fmt"
     "strconv"
 )
- 
+
 func main() {
     // converting string to int:
     i, err := strconv.Atoi("45")
- 
+
     // error handling
     if err != nil {
         fmt.Println(err)
     } else {
         fmt.Println(i)
- 
+
     }
- 
+
     // simple (short) statement ->  the same effect as the above code
     // i and err are variables scoped to the if statement only
     if i, err := strconv.Atoi("34"); err == nil {
@@ -1271,16 +1271,16 @@ func main() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
- 
+
     // printing numbers from 0 to 9
     for i := 0; i < 10; i++ {
         fmt.Println(i)
     }
- 
+
     // has the same effect as a while loop in other languages
     // there is no while loop in Go
     j := 10
@@ -1288,12 +1288,12 @@ func main() {
         fmt.Println(j)
         j--
     }
- 
+
     // handling of multiple variables in a for loop
     for i, j := 0, 100; i < 10; i, j = i+1, j+1 {
         fmt.Printf("i = %v, j = %v\n", i, j)
     }
- 
+
     // infinite loop
     // sum := 0
     // for {
@@ -1307,18 +1307,18 @@ func main() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
- 
+
     //** CONTINUE STATEMENT **//
- 
+
     // It works just the same as in C,  Java or Python.
     // The continue statement rejects all the remaining statements in the current iteration of the loop
     // and moves the control back to the top of the loop.
- 
- 
+
+
     // printing even numbers less than or equal to 10
     for i := 1; i <= 10; i++ {
         if i%2 != 0 {
@@ -1326,26 +1326,26 @@ func main() {
         }
         fmt.Println(i)
     }
- 
- 
+
+
     // **BREAK STATEMENT **//
- 
+
     // It is used to terminate the innermost for or switch statement.
     // It works just the same as in C,  Java or Python.
-    
-    // finding 10 numbers divisible by 13 
-    count := 0 
+
+    // finding 10 numbers divisible by 13
+    count := 0
     for i := 0; true; i++ {
         if i%13 == 0 {
             fmt.Printf("%d is divisible by 13\n", i)
             count++
         }
- 
+
         if count == 10 { //if 10 numbers were found, break!
             break //it breaks the current loop (inner loop if there are more loops)
         }
     }
- 
+
     // the break statement is not terminating the program entirely;
     fmt.Println("Just a message after the for loop")
 }
@@ -1355,25 +1355,25 @@ func main() {
 
 ```go
 package main
- 
+
 import (
     "fmt"
 )
- 
+
 func main() {
     //** LABEL STATEMENT **//
- 
+
     // declaring a variable
     // there is no conflict name between variable and label
-    outer := 19  
+    outer := 19
     _ = outer
- 
+
     // declaring two arrays
     people := [5]string{"Helen", "Mark", "Brenda", "Antonio", "Michael"}
     friends := [2]string{"Mark", "Marry"}
- 
+
     // searching for a single friend in a list of people.
-    
+
 outer: //label, it doesn't conflict with other names
     // iterating over the array.
     for index, name := range people {  // range returns both the index and the elements of the array one by one
@@ -1384,12 +1384,12 @@ outer: //label, it doesn't conflict with other names
             }
         }
     }
- 
+
     fmt.Println("Next instruction after the break.")
- 
- 
+
+
     // **GOTO STATEMENT **//
-    
+
     //the following piece of code creates a loop like a for statement does
     i := 0
 loop: // label
@@ -1398,7 +1398,7 @@ loop: // label
         i++
         goto loop
     }
- 
+
     //  goto todo //ERROR it's not permitted to jump over the declaration of x
     //  x := 5
     // todo:
@@ -1410,13 +1410,13 @@ loop: // label
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
- 
+
     language := "golang"
- 
+
     switch language {
     case "Python": //values must be comparable (compare string to string)
         fmt.Println("You are learning Python! You don't use { } but indentation !! ")
@@ -1428,7 +1428,7 @@ func main() {
         // and gets executed if no testing condition is true.
         fmt.Println("Any other programming language is a good start!")
     }
- 
+
     n := 5
     // comparing the result of an expression which is bool to another bool value
     switch true {
@@ -1439,9 +1439,9 @@ func main() {
     default:
         fmt.Println("Never here!")
     }
- 
+
     //** Switch simple statement **//
- 
+
     // Syntax: statement (n:=10), semicolon and a switch condition
     //(true in this case, we are comparing boolean expressions that return true)
     // we can remove the word "true" because it's the default
@@ -1460,33 +1460,33 @@ func main() {
 
 ```go
 package main
- 
+
 // import statements are file scoped
 import (
     "fmt"
- 
+
     // import "fmt" -> error, within the same scope, unique names
- 
+
     // importing as another name (alias) is permitted
     f "fmt"
 )
- 
+
 // variables or constant declared outside any function are package scoped
 const done = false
- 
+
 func main() { // package scoped
- 
+
     // block scoped: visible until the end of the block "}"
     var task = "Running:"
     fmt.Println(task, done) // => Running: false (this is done from package scope)
     f.Println("Bye bye!")
- 
+
     // names must be unique only within the same scope
     const done = true                        // local scoped
     fmt.Printf("done in main(): %v\n", done) // => done in main(): true
     f1()
 }
- 
+
 func f1() {
     fmt.Printf("done in f(): %v\n", done) //this is done from package scope
 }
@@ -1631,83 +1631,83 @@ func main() {
 
 ```go
 package main
- 
+
 import (
     "fmt"
 )
- 
+
 func main() {
- 
+
     // declaring an array with four elements of type int
     var numbers [4]int
- 
+
     // array zero value is zeroed value elements
     fmt.Printf("%v\n", numbers)  // -> [0 0 0 0]
     fmt.Printf("%#v\n", numbers) // -> [4]int{0, 0, 0, 0}
- 
+
     // declaring an array and initialize it using an array literal
     var a1 = [4]float64{}                           //initialized with defaults (0)
     var a2 = [3]int{5, -3, 5}                       //initialized with the given values
     a3 := [4]string{"Dan", "Diana", "Paul", "John"} //short declaration syntax
     a4 := [4]string{"x", "y"}                       //initializing only the first 2 elements
- 
+
     // the ellipsis operator (...) finds out automatically the length of the array
     a5 := [...]int{1, 4, 5}
     fmt.Println("The length of a5 is: ", len(a5)) // len is 3
- 
+
     // declare an array on multiple lines for better readability
     a6 := [...]int{1,
         2,
         3,
     } //the ending comma is mandatory when initializing the array on multiple lines and the closing curly brace is on its own line
- 
+
     _, _, _, _, _, _ = a1, a2, a3, a4, a5, a6
- 
+
     // changing an array
     // we can't add or remove elements from the array (it's fixed length)
     numbers[0] = 7              //changing first element (index 0)
     fmt.Printf("%v\n", numbers) // -> [7 0 0 0]
- 
+
     // compile-time error
     // numbers[5] = 8  // invalid array index 5 (out of bounds for 4-element array)
- 
+
     // getting an element
     x := numbers[0]
     fmt.Println("x is ", x) // => x is  7
- 
+
     // iterating over an array (2-ways)
     for i, v := range numbers { // range is a language keyword used for iteration
         fmt.Println("index:", i, "value: ", v)
- 
+
     }
- 
+
     // iterating over an array (C/C++, Java Style)
     for i := 0; i < len(numbers); i++ {
         fmt.Println("index:", i, "value: ", numbers[i])
     }
- 
+
     // declaring a multi-dimensional arrays (array of arrays or matrix)
     balances := [2][3]int{
         [3]int{5, 6, 7}, //[3]int is optional
         {8, 9, 10},
     }
- 
+
     for _, arr := range balances {
         for _, value := range arr {
             fmt.Printf("%d ", value)
         }
         fmt.Println("")
     }
- 
+
     //  = operator creates a copy of an array.
     // the arrays are not connected and are saved in different memory locations
     m := [3]int{1, 2, 3}
     n := m //n is a copy of m
- 
+
     fmt.Println("n is equal to m: ", n == m) // => true
     m[0] = -1                                //only m is modified
     fmt.Println("n is equal to m: ", n == m) // => false
- 
+
 }
 ```
 
@@ -1715,11 +1715,11 @@ func main() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
- 
+
     // each key corresponds to an index of the array
     grades := [3]int{ //the keyed elements can be in any order
         1: 10,
@@ -1727,17 +1727,17 @@ func main() {
         2: 7,
     }
     fmt.Println(grades) // -> [5 10 7]
- 
+
     accounts := [3]int{
         2: 50,
     }
     fmt.Println(accounts) //[0 0 50]
- 
+
     names := [...]string{
         4: "Dan",
     }
     fmt.Println(len(names)) // -> 5
- 
+
     // un unkeyed element gets its index from the last keyed element
     cities := [...]string{
         5:        "Paris",
@@ -1745,7 +1745,7 @@ func main() {
         1:        "NYC",
     }
     fmt.Printf("%#v\n", cities) // -> [7]string{"", "NYC", "", "", "", "Paris", "London"}
- 
+
     weekend := [7]bool{5: true, 6: true}
     fmt.Println(weekend) // => [false false false false false true true]
 }
@@ -1839,72 +1839,72 @@ func main() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
- 
+
 	// declaring a string slice, by default is initialized with nil or uninitialized
 	var cities []string
- 
+
 	fmt.Println("cities is equal to nil: ", cities == nil) // -> cities is equal to nil:  true
 	fmt.Printf("cities: %#v\n", cities)                    // -> cities: []string(nil)
- 
+
 	// we can not assign elements to nil slice:
 	// cities[0] = "Paris" // -> runtime error
- 
+
 	// declaring a slice using a slice literal
 	numbers := []int{2, 3, 4, 5} // on the right hand-side of the equal sign is a slice literal
 	fmt.Println(numbers)         // => [2 3 4 5]
- 
+
 	// creating a slice using the make() built-in function
 	// creating a slice with 2 int elements initialized with zero.
 	nums := make([]int, 2) // the same as []int{0, 0}.
 	fmt.Println(nums)      // => [0 0]
- 
+
 	// declaring a slice using a slice literal
 	type names []string
 	friends := names{"Dan", "Maria"}
 	fmt.Println(friends)
- 
+
 	// getting an element from the slice
 	x := numbers[0]
 	fmt.Println("x is", x) // => x is 2
- 
+
 	// modifying an element of the slice
 	numbers[1] = 200
 	fmt.Printf("%#v\n", numbers) // => []int{2, 200, 4, 5}
- 
+
 	// iterating over a slice
 	for index, value := range numbers {
 		fmt.Printf("index: %v, value: %v\n", index, value)
 	}
- 
+
 	//iterating over a slice (C/C++, Java Style)
 	for i := 0; i < len(numbers); i++ {
 		fmt.Printf("index: %v, value: %v\n", i, numbers[i])
- 
+
 	}
- 
+
 	// slices with the same element type can be assigned to each other
 	var n []int
 	n = numbers
 	_ = n
- 
+
 	//** COMPARING SLICES **//
 	// a Go slice can only be compared to nil
- 
+
 	// uninitialized slice, equal to nil
 	var nn []int
 	fmt.Println(nn == nil) // true
- 
+
 	// empty slice but initialized, not equal to nil
 	mm := []int{}
 	fmt.Println(mm == nil) //false
- 
+
 	// we can not compare slices using the equal (=) operator
 	// fmt.Println(nn == mm) //error -> slice can only be compared to nil
- 
+
 	// to compare 2 slices use a for loop to iterate over the slices and compare element by element
     // it's also necessary to check the length of slices (if a is nil it doesn't enter the for loop)
     a, b := []int{1, 2, 3}, []int{1, 2, 3}
@@ -1912,14 +1912,14 @@ func main() {
 	if len(a) != len(b) {
 		eq = false
 	}
- 
+
 	for i, valueA := range a {
 		if valueA != b[i] {
 			eq = false // don't check further, break!
 			break
 		}
 	}
-	
+
 	if eq {
 		fmt.Println("a and b slices are equal")
 	} else {
@@ -1961,30 +1961,30 @@ func main() {
 
 ```go
 package main
- 
+
 import "fmt"
- 
+
 func main() {
- 
+
     // arrays, slices and strings are sliceable
     // slicing doesn't modify the array or the slice, it returns a new one
- 
+
     // declaring an [5]int array
     a := [5]int{1, 2, 3, 4, 5}
- 
+
     // a slice expression is formed by specifying a start or a low bound and a stop or high bound like  a[start:stop].
     // this selects a range of elements which includes the element at index start, but excludes the element at index stop.
- 
+
     // slicing an array returns a slice, not an array
     b := a[1:3]                                 // 1 is called start (included), 3 is called stop (excluded)
     fmt.Printf("Type: %T , Value: %#v\n", b, b) // => Type: []int , Value: []int{2, 3}
- 
+
     // declaring a slice
     s1 := []int{1, 2, 3, 4, 5, 6}
- 
+
     s2 := s1[1:3]   //start included, stop excluded
     fmt.Println(s2) //[2 3]
- 
+
     //for convenience, any of the indexis may be omitted.
     // a missing low index defaults to zero; a missing high index defaults to the length of the sliced operand.
     fmt.Println(s1[2:])       // => [3 4 5 6], same as s1[2:len(s1)]
@@ -1992,10 +1992,10 @@ func main() {
     fmt.Println(s1[:])        // => [1 2 3 4 5 6], same with s1[0:len(s1)]
     fmt.Println(s1[:len(s1)]) // => => [1 2 3 4 5 6], returns the entire slice
     // fmt.Println(s1[:45])   //panic: runtime error: slice bounds out of range
- 
+
     s1 = append(s1[:4], 100) // adds 100 after index 4 (excluded)
     fmt.Println(s1)          // -> [1 2 3 4 100]
- 
+
     s1 = append(s1[:4], 200) // overwrites the last element
     fmt.Println(s1)          // -> [1 2 3 4 200]
 }
@@ -2011,41 +2011,41 @@ func main() {
 // - the address of the backing array (pointer).
 // - the length of the slice.  The built-in function len() returns it.
 // - the capacity of the slice. The size of the backing array after the slice first element. cap() built-in function returns it.
- 
+
 // A nil slice doesn't have backing array, so all the fields in the slice header are equal to zero.
- 
+
 package main
- 
+
 import (
     "fmt"
 )
- 
+
 func main() {
- 
+
     // a slice expression doesn't create a new backing array. The original and the returned slice are connected!
     s1 := []int{10, 20, 30, 40, 50}
     s3, s4 := s1[0:2], s1[1:3] //s3, s4 share the same backing array with s1
- 
+
     s3[1] = 600     // modifying the backing array so s1, s3 and s4 are in fact modified!!
     fmt.Println(s1) // -> [10 600 30 40 50]
     fmt.Println(s4) // -> [600 30]
- 
+
     // when a slice is created by slicing an array, that array becomes the backing array of the new slice.
     arr1 := [4]int{10, 20, 30, 40}
     slice1, slice2 := arr1[0:2], arr1[1:3]
     arr1[1] = 2                       // modifying the array
     fmt.Println(arr1, slice1, slice2) // -> [10 2 30 40] [10 2] [2 30]
- 
+
     // append() function creates a complete new slice from an existing slice
     cars := []string{"Ford", "Honda", "Audi", "Range Rover"}
     newCars := []string{}
- 
+
     // newCars doesn't share the same backing array with cars
     newCars = append(newCars, cars[0:2]...)
- 
+
     cars[0] = "Nissan"                              // only cars is modified
     fmt.Println("cars:", cars, "newCars:", newCars) // => cars: [Nissan Honda Audi Range Rover] newCars: [Ford Honda
- 
+
 }
 ```
 
@@ -2100,3 +2100,154 @@ func main() {
 ```
 
 ## Slices exercises
+
+### Slices ex1
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Using a composite literal declare and initialize a slice of type string with 3 elements.
+	names := []string{"Mario", "Maria", "Mariarosa"}
+	// Iterate over the slice and print each element in the slice and its index.
+	for i, name := range names {
+		fmt.Printf("%d - %s\n", i, name)
+	}
+}
+```
+
+### Slice ex2
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	mySlice := []float64{1.2, 5.6}
+
+	// There are some errors
+	mySlice[0] = 6
+
+	// There are some errors
+	a := float64(10)
+	mySlice[0] = a
+
+	// There are some errors
+	// mySlice[3] = 10.10
+	mySlice[1] = 10.10
+
+	mySlice = append(mySlice, a)
+
+	fmt.Println(mySlice)
+}
+```
+
+### Slices ex3
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// 1. Declare a slice called nums with three float64 numbers.
+	nums := []float64{1.1, 2.2, 3.3}
+	// 2. Append the value 10.1 to the slice
+	nums = append(nums, 1.1)
+	// 3. In one statement append to the slice the values: 4.1,  5.5 and 6.6
+	nums = append(nums, 4.1, 5.5, 6.6)
+	// 4. Print out the slice
+	fmt.Printf("%#v\n", nums)
+	// 5. Declare a slice called n with two float64 values
+	n := []float64{7.7, 8.8}
+	// 6. Append n to nums
+	nums = append(nums, n...)
+	// 7. Print out the nums slice
+	fmt.Printf("%#v\n", nums)
+}
+```
+
+### Slices ex4
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+	"strconv"
+)
+
+// Create a Go program that reads some numbers from the command line
+// and then calculates the sum and the product
+// of all the numbers given at the command line.
+
+func main() {
+	sum, prod := 0., 1.
+
+	for i := 1; i < len(os.Args); i++ {
+		n, err := strconv.ParseFloat(os.Args[i], 64)
+		if err != nil {
+			continue
+		}
+
+		if n < 2 || n > 10 {
+			fmt.Println("Please enter between 2 and 10 numbers!")
+			return
+		}
+
+		sum += n
+		prod *= n
+	}
+
+	fmt.Printf("sum = %.2f, prod = %.2f\n", sum, prod)
+}
+```
+
+### Slices ex5
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Consider the following slice declaration:
+	nums := []int{5, -1, 9, 10, 1100, 6, -1, 6}
+
+	// Using a slice expression and a for loop iterate over the slice ignoring the first and the last two elements.
+	var sum int
+
+	// Print those elements and their sum.
+	for _, num := range nums[1 : len(nums)-2] {
+		fmt.Println(num)
+		sum += num
+	}
+	fmt.Println("Sum:", sum)
+}
+```
+
+### Slices ex6
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Consider the following slice declaration:
+	friends := []string{"Marry", "John", "Paul", "Diana"}
+
+	// Using copy() function create a copy of the slice.
+	friendsCopy := make([]string, len(friends))
+	_ = copy(friendsCopy, friends)
+
+	// Prove that the slices are not connected by modifying one slice and notice that the other slice is not modified.
+	friends[0] = "Mario"
+	fmt.Printf("original: %#v\n", friends)
+	fmt.Printf("copy: %#v\n", friendsCopy)
+}
+```
