@@ -2507,5 +2507,151 @@ func main() {
 ### Strings ex1
 
 ```go
+package main
 
+import "fmt"
+
+func main() {
+	// 1. Using the var keyword declare a string called name and initialize it with your name.
+	var name = "Mario"
+	// 2. Using short declaration syntax declare a string called country and assign the country you are living in to the string variable.
+	country := "Italia"
+
+	// 3. Print the following string on multiple lines like this:
+	// Your name: `here the value of name variable`
+	// Country: `here the value of country variable`
+	fmt.Printf("Your name: '%s'\nCountry: '%s'\n", name, country)
+
+	// 4. Print out the following strings:
+	// a) He says: "Hello"
+	// b) C:\Users\a.txt
+	fmt.Println(`He says: "Hello"
+C:\Users\a.txt`)
+}
+```
+
+### Strings ex2
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	// 1. Declare a rune called r that stores the non-ascii letter ă
+	r := 'ă'
+
+	// 2. Print out the type of r
+	fmt.Printf("%v\n", r)
+	fmt.Printf("%T\n", r)
+
+	// 3. Declare 2 strings that contains the values ma and m
+	str1, str2 := "ma", "m"
+
+	// 4. Concatenate the strings and the rune in a new string
+	// (the new string will hold the value mamă ).
+	str3 := str1 + str2 + string(r)
+	fmt.Println(str3)
+}
+```
+
+### Strings ex3
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Consider the following string declaration:
+	s1 := "țară means country in Romanian"
+
+	// 1. Iterate over the string and print out byte by byte
+	for i := range s1 {
+		fmt.Printf("%b\n", s1[i])
+	}
+
+	fmt.Println()
+
+	// 2. Iterate  over the string and print out rune by rune and the byte index where the rune starts in the string
+	for i, c := range s1 {
+		fmt.Printf("%d %d\n", i, c)
+	}
+}
+```
+
+### Strings ex4
+
+```go
+package main
+
+import (
+	"fmt"
+	"strings"
+	"unicode/utf8"
+)
+
+func main() {
+	s1 := "Go is cool!"
+	x := s1[0]
+	fmt.Println(x)
+
+	// There are some errors
+	// s1[0] = 'x'
+	strings.Replace(s1, s1, "G", 'x')
+
+	// printing the number of runes in the string
+	fmt.Println(len(s1))
+	fmt.Println(utf8.RuneCountInString(s1))
+}
+```
+
+### Strings ex5
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Consider the following string declaration:
+	s := "你好 Go!"
+
+	// 1. Convert the string to a byte slice.
+	b := []byte(s)
+
+	// 2. Print out the byte slice
+	fmt.Printf("%b\n", b)
+
+	// 3. Iterate over the byte slice and print out each index and byte in the byte slice
+	for i, v := range b {
+		fmt.Printf("%d %b\n", i, v)
+	}
+}
+```
+
+### Strings ex6
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Consider the following string declaration:
+	s := "你好 Go!"
+
+	// 1. Convert the string to a rune slice.
+	r := []rune(s)
+
+	// 2. Print out the rune slice
+	fmt.Printf("%v\n", r)
+
+	// 3. Iterate over the rune slice and print out each index and rune in the rune slice
+	for i, v := range r {
+		fmt.Printf("%d %c\n", i, v)
+	}
+}
 ```
