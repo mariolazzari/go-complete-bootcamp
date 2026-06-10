@@ -3502,3 +3502,239 @@ func main() {
  
 }
 ```
+
+### Working with structs
+
+```go
+package main
+ 
+import (
+    "fmt"
+    "strings"
+)
+ 
+func main() {
+ 
+    // an anonymous struct is a struct with no explicitly defined struct type alias.
+    diana := struct {
+        firstName, lastName string
+        age                 int
+    }{
+        firstName: "Diana",
+        lastName:  "Muller",
+        age:       30,
+    }
+ 
+    fmt.Printf("%#v\n", diana)
+    // =>struct { firstName string; lastName string; age int }{firstName:"Diana", lastName:"Muller", age:30
+ 
+    //** ANONYMOUS FIELDS **//
+ 
+    // fields type becomes fields name.
+    type Book struct {
+        string
+        float64
+        bool
+    }
+ 
+    b1 := Book{"1984 by George Orwell", 10.2, false}
+    fmt.Printf("%#v\n", b1) // => main.Book{string:"1984 by George Orwell", float64:10.2, bool:false}
+ 
+    fmt.Println(b1.string) // => 1984 by George Orwell
+ 
+    // mixing anonymous with named fields:
+    type Employee1 struct {
+        name   string
+        salary int
+        bool
+    }
+ 
+    e := Employee1{"John", 40000, false}
+    fmt.Printf("%#v\n", e) // => main.Employee1{name:"John", salary:40000, bool:false}
+    e.bool = true          // changing a field
+ 
+    fmt.Println(strings.Repeat("#", 10))
+ 
+    //** EMBEDDED STRUCTS **//
+    // An embedded struct is just a struct that acts like a field inside another struct.
+ 
+    // define a new struct type
+    type Contact struct {
+        email, address string
+        phone          int
+    }
+ 
+    // define a struct type that contains another struct as a field
+    type Employee struct {
+        name        string
+        salary      int
+        contactInfo Contact
+    }
+ 
+    // declaring a value of type Employee
+    john := Employee{
+        name:   "John Keller",
+        salary: 3000,
+        contactInfo: Contact{
+            email:   "jkeller@company.com",
+            address: "Street 20, London",
+            phone:   042324234,
+        },
+    }
+ 
+    fmt.Printf("%+v\n", john)
+    // => {name:John Keller salary:3000 contactInfo:{email:jkeller@company.com address:Street 20, London phone:295619381404}}
+ 
+    // accessing a field
+    fmt.Printf("Employee's salary: %d\n", john.salary)
+ 
+    // accessing a field from the embedded struct
+    fmt.Printf("Employee's email:%s\n", john.contactInfo.email) // => Employee's email:jkeller@company.com
+ 
+    // updating a field
+    john.contactInfo.email = "new_email@thecompany.com"
+    fmt.Printf("Employee's new email address:%s\n", john.contactInfo.email)
+    // =>  Employee's new email address:new_email@thecompany.com
+}
+```
+
+## Structs exercises
+
+### Structs ex1
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// 1. Create your own struct type called person that stores the following data:
+	// name, age and a list with favorite colors.
+	type person struct {
+		name   string
+		age    int
+		colors []string
+	}
+
+	// 2. Declare and initialize two values of type person, one called me and another called you.
+	me := person{name: "Mario", age: 51, colors: []string{"black", "blue"}}
+	you := person{name: "Mariarosa", age: 50, colors: []string{"green"}}
+
+	// 3. Print out the struct values.
+	fmt.Printf("%#v\n", me)
+	fmt.Printf("%#v\n", you)
+}
+```
+
+### Structs ex2
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Consider the code from the previous exercise and:
+	type person struct {
+		name   string
+		age    int
+		colors []string
+	}
+
+	me := person{name: "Mario", age: 51, colors: []string{"black", "blue"}}
+	you := person{name: "Mariarosa", age: 50, colors: []string{"green"}}
+
+	// 1. Change the name or the struct value called me to "Andrei"
+	me.name = "Andrei"
+
+	// 2. Take in a new variable the favorites colors of struct value called you.
+	// Print out the type and the value of the new variable.
+	yourColors := you.colors
+	fmt.Printf("Your colors: %#v\n", yourColors)
+
+	// 3. Add a new favorite color to the second struct value called you.
+	yourColors = append(yourColors, "pink")
+	you.colors = yourColors
+
+	// 4. Print out the struct values.
+	fmt.Printf("Your colors: %#v\n", you.colors)
+}
+```
+
+### Structs ex3
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Consider the code from Exercise #1.
+	type person struct {
+		name   string
+		age    int
+		colors []string
+	}
+
+	me := person{name: "Mario", age: 51, colors: []string{"black", "blue"}}
+
+	// Iterate and print out the favorite colors of the struct value called me.
+	for _, color := range me.colors {
+		fmt.Println(color)
+	}
+}
+```
+
+### Structs ex4
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Change the code from Exercise #1 and:
+
+	// 1. Create a new struct type called grades with  2 fields: grade and course
+	type grades struct {
+		grade  int
+		course string
+	}
+
+	// 2. Add another field of type grades to person struct type (embedded struct).
+	type person struct {
+		name   string
+		age    int
+		colors []string
+		grades grades
+	}
+
+	// 3. Change the initialization of the struct values called me and you to contain information about the grades.
+	me := person{name: "Mario", age: 51, colors: []string{"black", "blue"}, grades: grades{grade: 100, course: "a"}}
+
+	// 4. Change the grade and the course of one struct value to "Golang" and 98.
+	me.grades.course = "Golang"
+	me.grades.grade = 98
+
+	// 5. Print out the struct values.
+	fmt.Printf("me: %#v\n", me)
+}
+```
+
+## Functions
+
+### Function
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	f1()
+}
+
+func f1() {
+	fmt.Println("F1")
+}
+```
