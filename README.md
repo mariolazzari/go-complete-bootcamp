@@ -3283,3 +3283,222 @@ func main() {
     }
 }
 ```
+
+## Files exercises
+
+### File ex1
+
+```go
+package main
+
+import (
+	"log"
+	"os"
+)
+
+func main() {
+	// Create a new file in the current working directory called info.txt and then close the file.
+	// If the file cannot be created (no permissions, wrong path etc) then print out the error and stop the program (do error handling).
+	file, err := os.Create("info.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+}
+```
+
+### File ex2
+
+```go
+package main
+
+import (
+	"log"
+	"os"
+)
+
+func main() {
+	// Rename the file created at Exercise #1 to data.txt
+	// Check if file exists before renaming it.
+	// If it doesn't exist print a message and stop the program.
+
+	oldName := "info.txt"
+	newName := "data.txt"
+
+	_, err := os.Stat(oldName)
+	if err != nil {
+		if os.IsNotExist(err) {
+			log.Fatalf("File %s does not exist\n", oldName)
+		}
+	}
+
+	err = os.Rename(oldName, newName)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+```
+
+### File ex3
+
+```go
+package main
+
+import (
+	"log"
+	"os"
+)
+
+func main() {
+	// Remove the file created at exercise #1.
+	// Take care that the file is now called data.txt (it has been renamed at exercise #2).
+	// Perform error handling.
+
+	err := os.Remove("data.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+```
+
+### File ex4
+
+```go
+package main
+
+import (
+	"fmt"
+	"io"
+	"log"
+	"os"
+)
+
+func main() {
+	// Create a Go Program that reads the entire contents of a file called info.txt into a string.
+	// You can use ioutil.ReadAll() or any other function you want.
+	// The file exists in the current working directory.
+
+	file, err := os.OpenFile("README.md", os.O_RDONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	fileBytes, err := io.ReadAll(file)
+	fmt.Println(string(fileBytes))
+}
+```
+
+### File ex5
+
+```go
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"os"
+)
+
+func main() {
+	// Create a Go Program that reads the entire contents of a file called info.txt  using a scanner (bufio package) line by line.
+	// The file exists in the current working directory.
+
+	file, err := os.OpenFile("README.md", os.O_RDONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+}
+```
+
+### File ex6
+
+```go
+package main
+
+import (
+	"io/ioutil"
+	"log"
+)
+
+func main() {
+		bs := []byte("The Go gopher is an iconic mascot!")
+	err := ioutil.WriteFile("info.txt", bs, 0644)
+	// error handling
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+```
+
+## Structs
+
+### Creating structs
+
+```go
+package main
+ 
+import "fmt"
+ 
+func main() {
+ 
+    // creating a struct type
+    type book struct {
+        title  string //the fields of the book struct
+        author string //each field must be unique inside a struct
+        year   int
+    }
+ 
+    // combining different fields of the same type on the same line
+    type book1 struct {
+        title, author string
+        year, pages   int
+    }
+ 
+    // declaring, initializing and assigning a new book value, all in one step
+    lastBook := book{"The Divine Comedy", "Dante Aligheri", 1320} //this is a struct literal and order matters
+    fmt.Println(lastBook)
+ 
+    // Declaring a new book value by specifying field: value (order doesn't matter)
+    bestBook := book{title: "Animal Farm", author: "George Orwell", year: 1945}
+    _ = bestBook
+ 
+    //if we create a new struct value by omitting some fields they will be zero-valued according to their type
+    aBook := book{title: "Just a random book"}
+    fmt.Printf("%#v\n", aBook) // => main.book{title:"Just a random book", author:"", year:0}
+ 
+    // retrieving the value of a struct field
+    fmt.Println(lastBook.title) // => The Divine Comedy
+ 
+    // selecting a field that doesn't exist raises an error
+    // pages := lastBook.pages // error -> lastBook.pages undefined (type book has no field or method pages)
+ 
+    // updating a field
+    lastBook.author = "The Best"
+    lastBook.year = 2020
+    fmt.Printf("lastBook: %+v\n", lastBook) // => lastBook: {title:The Divine Comedy author:The Best year:2020}
+    // + modifier with %v  printed out both the field names and their values
+ 
+    // comparing struct values
+    // two struct values are equal if their corresponding fields are equal.
+    randomBook := book{title: "Random Title", author: "John Doe", year: 100}
+    fmt.Println(randomBook == lastBook) // => false
+ 
+    // = creates a copy of a struct
+    myBook := randomBook
+    myBook.year = 2020              // modifying only myBook
+    fmt.Println(myBook, randomBook) // => {Random Title John Doe 2020} {Random Title John Doe 100}
+ 
+}
+```
