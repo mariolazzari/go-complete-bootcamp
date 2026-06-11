@@ -4208,3 +4208,11 @@ func main() {
 	p(1)
 }
 ```
+
+## Pointers
+
+### Pointers intro
+
+```go
+
+```
