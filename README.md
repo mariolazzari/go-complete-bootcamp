@@ -3738,3 +3738,316 @@ func f1() {
 	fmt.Println("F1")
 }
 ```
+
+### Function parameters
+
+[No pass by reference](https://dave.cheney.net/2017/04/29/there-is-no-pass-by-reference-in-go)
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+// defining a function with no parameters
+func f1() {
+	fmt.Println("This is f1() function")
+}
+
+// defining a function with 2 parameters, a and b
+func f2(a int, b int) {
+	//a and b are local to the function
+	fmt.Println("Sum:", a+b)
+}
+
+// defining a function using shorthand parameters notation
+func f3(a, b, c int, d, e float64, s string) {
+	fmt.Println(a, b, c, d, e, s)
+}
+
+// defining a function that have one parameter of type float64 and returns a value of type float64
+func f4(a float64) float64 {
+	return math.Pow(a, a)
+	//any statements below the return statement are never executed
+
+}
+
+// defining a function that have two parameters of type int and returns two values of type int
+func f5(a, b int) (int, int) {
+	return a * b, a + b
+}
+
+// defining a function that have one parameter of type int and returns a "named parameter"
+func sum(a, b int) (s int) {
+	fmt.Println("s:", s) // -> s is a variable with the zero value inside the function
+	s = a + b
+
+	// it automatically return s
+	return // This is known as a "naked" return.
+}
+
+func main() {
+	// calling functions
+	f1() // => This is f1() function
+
+	f3(3, 4, 5, 4., 5.5, "ss") // => 3 4 5 4 5.5 ss
+
+	fmt.Println(f4(5.1))
+
+	a, b := f5(6, 7)
+	fmt.Printf("a:%d, b:%d\n", a, b) // => a:42, b:13
+
+	ss := sum(4, 5)
+	fmt.Println(ss) // -> 9
+
+	// There are no default arguments in Go //
+}
+```
+
+### Variadic functions
+
+```go
+package main
+ 
+import (
+    "fmt"
+    "strings"
+)
+ 
+// creating a variadic function
+func f1(a ...int) {
+    fmt.Printf("%T\n", a) // => []int, slice of int
+    fmt.Printf("%#v\n", a)
+}
+ 
+// variadicfunction that modifies one of the arguments passed.
+func f2(a ...int) {
+    a[0] = 50
+}
+ 
+// creating a variadic function that calculates and returns the sum and product of its arguments
+func sumAndProduct(a ...float64) (float64, float64) {
+    sum := 0.
+    product := 1.
+ 
+    for _, v := range a {
+        sum += v
+        product *= v
+    }
+ 
+    return sum, product
+}
+ 
+// mixing variadic and non-variadic parameters is allowed
+// non-variadic parameters are always before the variadic parameter
+func personInformation(age int, names ...string) string {
+    fullName := strings.Join(names, " ")
+    returnString := fmt.Sprintf("Age: %d, Full Name:%s", age, fullName)
+    return returnString
+}
+ 
+func main() {
+ 
+    // calling variadic functions
+    // a variadic function can be invoked with zero or more arguments
+    f1(1, 2, 3, 4)
+ 
+    f1() // a is: []int(nil)
+ 
+    // an example of a well-known variadic function is append() built-in function.
+    // it appends items to an existing slice and returns back the same slice.
+    nums := []int{1, 2}
+    nums = append(nums, 3, 4)
+ 
+    s, p := sumAndProduct(2., 5., 10.)
+    fmt.Println(s, p) // -> 17 100
+ 
+    info := personInformation(35, "Wolfgang", "Amadeus", "Mozart")
+    fmt.Println(info) // => Age: 35, Full Name:Wolfgang Amadeus Mozart
+}
+```
+
+### Defer
+
+```go
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func foo() {
+    fmt.Println("This is foo()!")
+}
+ 
+func bar() {
+    fmt.Println("This is bar()!")
+}
+ 
+func foobar() {
+    fmt.Println("This is foobar()!")
+}
+ 
+func main() {
+ 
+    // a defer statement defers or postpones the execution of a function until the surrounding function returns.
+ 
+    // by deferring foo() it will execute it just before exiting the surrounding function which is main()
+    defer foo()
+    bar()
+ 
+    fmt.Println("Just a string after deferring foo() and calling bar()")
+ 
+    // if there are more functions deferred, Go will execute them in the reverse order they were deferred
+    defer foobar()
+ 
+    /*
+        When executing the program the fallowing output is printed out:
+ 
+        This is bar()!
+        Just a string after deferring foo() and calling bar()
+        This is foobar()!
+        This is foo()!
+    */
+ 
+}
+```
+
+### Anonymous functions
+
+```go
+package main
+ 
+import "fmt"
+ 
+// function that takes an int as an argument and returns another function that returns an int
+func increment(x int) func() int {
+    return func() int {
+        x++
+        return x
+    }
+}
+ 
+func main() {
+    // declaring an anonymous functions
+    func(msg string) {
+        fmt.Println(msg)
+    }("I'm an anonymous function!") // calling the anonymous function
+ 
+    // calling the increment function. It returns an anonymous function
+    a := increment(10)
+    fmt.Println(a())
+    fmt.Println(a())
+    fmt.Println(a())
+}
+```
+
+## Functions exercises
+
+### Function ex1
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+// Create a function called cube() that takes a parameter of type float64 and returns the cube of that parameter
+// (the parameter to the power of 3).
+func cube(n float64) float64 {
+	return n * n * n
+}
+
+func main() {
+	fmt.Printf("%.3f\n", cube(3))
+}
+```
+
+### Function ex2
+
+```go
+package main
+
+import "fmt"
+
+// Create a Go program with a function called f1() that takes a parameter of type uint and returns 2 values:
+// a) the factorial of n
+// b) the sum of all integer numbers greater than zero (>0) and less than or equal to n (<=n)
+
+func f1(n uint) (uint, uint) {
+	var fact uint = 1
+	var sum uint
+
+	// factorial of n
+	var i uint = n
+	for i > 0 {
+		fact *= i
+		i--
+	}
+
+	// sum of [0,n]
+	i = 0
+	for i <= n {
+		sum += i
+		i++
+	}
+
+	return fact, sum
+}
+
+func main() {
+	f, s := f1(1)
+	fmt.Printf("fact = %d, sum = %d\n", f, s)
+	f, s = f1(2)
+	fmt.Printf("fact = %d, sum = %d\n", f, s)
+	f, s = f1(3)
+	fmt.Printf("fact = %d, sum = %d\n", f, s)
+	f, s = f1(4)
+	fmt.Printf("fact = %d, sum = %d\n", f, s)
+}
+```
+
+### Function ex3
+
+```go
+
+```
+
+### Function ex4
+
+```go
+
+```
+
+### Function ex5
+
+```go
+
+```
+
+### Function ex6
+
+```go
+
+```
+
+### Function ex7
+
+```go
+
+```
+
+### Function ex8
+
+```go
+
+```
+
+### Function ex9
+
+```go
+
+```
