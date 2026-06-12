@@ -4390,5 +4390,120 @@ func main() {
 ### Pointer ex1
 
 ```go
+package main
 
+import "fmt"
+
+func main() {
+	// Consider the following variable declaration
+	x := 10.10
+
+	// 1. Print out the address of x
+	fmt.Printf("%p\n", &x)
+
+	// 2. Declare a pointer called ptr that stores the address of x.
+	ptr := &x
+
+	// 3. Print out the type and the value of ptr.
+	fmt.Printf("%T %v\n", ptr, ptr)
+
+	// 4. Print the address of the pointer and the value of x though the pointer (use the dereferencing operator).
+	fmt.Printf("%T %v\n", ptr, *ptr)
+}
+```
+
+### Pointer ex2
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Consider the following variable declarations:
+	x, y := 10, 2
+	ptrx, ptry := &x, &y
+
+	// Declare a new variable called z and initialize the variable by dividing x by y through the pointers.
+	z := *ptrx / *ptry
+	fmt.Printf("z = %v", z)
+}
+```
+
+### Pointer ex3
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// Consider the following variable declaration:
+	x, y := 5.5, 8.8
+
+	// Write a function that swaps the values of x and y.
+	// After calling the function x will be 8.8 and y will 5.5
+
+	fmt.Printf("x = %f, y = %f\n", x, y)
+	swap(&x, &y)
+	fmt.Printf("x = %f, y = %f\n", x, y)
+}
+
+func swap(a, b *float64) {
+	*a, *b = *b, *a
+}
+```
+
+## OOP
+
+### Receiver
+
+```go
+package main
+ 
+import (
+    "fmt"
+    "time"
+)
+ 
+// declaring a new type
+type names []string
+ 
+// declaring a method (function receiver)
+func (n names) print() {
+    // n is called method's receiver
+    // n is the actual copy of the names we're working with and is available in the function.
+    // n is like this or self from OOP.
+    // any variable of type names can call this function on itself like variable_name.print()
+ 
+    // iterating and printing all names
+    for i, name := range n {
+        fmt.Println(i, name)
+    }
+}
+ 
+func main() {
+ 
+    // Go doesn't have classes, but you can define methods on defined types.
+    // a type may have a method set associated with it which enhances the type with extra behaviour.
+ 
+    const day = 24 * time.Hour
+    fmt.Printf("%T\n", day) // it's type is time.Duration
+ 
+    // calling a method on time.Duration type
+    // Seconds() is a method aka a receiver function.
+    seconds := day.Seconds()
+ 
+    // Seconds() returns the duration as a floating point number of seconds.
+    fmt.Printf("%T\n", seconds)               //its type is float64
+    fmt.Println("Seconds in a day:", seconds) // Seconds in a day: 86400
+ 
+    // declaring a value of type names
+    friends := names{"Dan", "Marry"}
+    // calling the print() method on friends variable
+    friends.print()
+ 
+    // another way to call a method on a type
+    names.print(friends) // not very common
+}
 ```
