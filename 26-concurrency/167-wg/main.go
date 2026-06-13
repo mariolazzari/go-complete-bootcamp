@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"runtime"
-	"time"
+	"sync"
 )
 
-func f1() {
+func f1(wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	fmt.Println("f1() start")
 	for i := range 3 {
 		fmt.Println("f1() i =", i)
@@ -14,7 +16,9 @@ func f1() {
 	fmt.Println("f1() end")
 }
 
-func f2() {
+func f2(wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	fmt.Println("f2() start")
 	for i := range 8 {
 		fmt.Println("f2() i =", i)
@@ -25,19 +29,16 @@ func f2() {
 func main() {
 	fmt.Println("Main execution started")
 
-	fmt.Println("Logical CPUs:", runtime.NumCPU())
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go f1(&wg)
 	fmt.Println("Goroutines:", runtime.NumGoroutine())
 
-	fmt.Println("OS:", runtime.GOOS)
-	fmt.Println("Arch:", runtime.GOARCH)
-	fmt.Println("Max Procs:", runtime.GOMAXPROCS(0))
-
-	go f1()
+	wg.Add(1)
+	go f2(&wg)
 	fmt.Println("Goroutines:", runtime.NumGoroutine())
 
-	go f2()
-	fmt.Println("Goroutines:", runtime.NumGoroutine())
-
-	time.Sleep(time.Millisecond * 200)
+	wg.Wait()
 	fmt.Println("Main execution ended")
 }
