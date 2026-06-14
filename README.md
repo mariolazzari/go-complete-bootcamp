@@ -5227,5 +5227,118 @@ func main() {
 ### URL checker
 
 ```go
+package main
 
+import (
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"os"
+	"runtime"
+	"strings"
+	"sync"
+)
+
+func checkAndSaveBody(url string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Println(err)
+		fmt.Printf("%s is dow\n", url)
+		return
+	}
+
+	defer resp.Body.Close()
+	fmt.Printf("%s -> %d\n", url, resp.StatusCode)
+	if resp.StatusCode == 200 {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		file := strings.Split(url, "//")[1]
+		fmt.Printf("Writing response to %s\n", file)
+		err = os.WriteFile(file, body, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
+func main() {
+	urls := []string{"https://mariolazzari.it", "https://mariafilippini.it", "https://golang.org"}
+	var wg sync.WaitGroup
+
+	wg.Add(len(urls))
+
+	for _, url := range urls {
+		go checkAndSaveBody(url, &wg)
+	}
+
+	fmt.Printf("Goroutines running: %d\n", runtime.NumGoroutine())
+
+	wg.Wait()
+}
 ```
+
+### Data race
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+func main() {
+
+	const gr = 100
+	// declaring a WaitGroup to synchronize the goroutines with the main function.
+	var wg sync.WaitGroup
+
+	// adding 200 goroutines to the WaitGroup
+	wg.Add(gr * 2)
+
+	// declaring a shared value
+	var n int = 0
+
+	// starting 200 goroutines
+	for range gr {
+
+		// each goroutine is an anonymous function
+		go func() {
+			// notifying the WaitGroup that the goroutine is done
+			defer wg.Done()
+			// introducing some artificial time
+			time.Sleep(time.Second / 10)
+			// increment the shared value
+			n++
+		}()
+
+		// goroutine that decrements the shared value
+		go func() {
+			defer wg.Done()
+			time.Sleep(time.Second / 10)
+			n--
+		}()
+
+	}
+	// waiting for the goroutines to terminate.
+	wg.Wait()
+
+	//  printing the final value of n
+	fmt.Println(n) // it will have another value for each program execution -> DATA RACE
+}
+```
+
+### Race detextor
+
+```sh
+go run --race main.go
+```
+
+###
