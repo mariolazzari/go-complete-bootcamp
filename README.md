@@ -5392,4 +5392,110 @@ func main() {
 ### Channels
 
 ```go
+package main
+
+import "fmt"
+
+func f1(n int, ch chan int) {
+	ch <- n
+}
+
+func main() {
+	var ch chan int
+	fmt.Println(ch)
+
+	ch = make(chan int)
+	fmt.Println(ch)
+
+	// send operation
+	go func() {
+		ch <- 42
+	}()
+
+	// receive operation
+	n := <-ch
+
+	fmt.Println("n =", n)
+	// fmt.Println("n =", <-ch)
+
+	// send only
+	c1 := make(chan<- string)
+	// receive only
+	c2 := make(<-chan string)
+
+	fmt.Printf("%T, %T, %T\n", ch, c1, c2)
+
+	// goroutines and channels
+	go f1(50, ch)
+	n = <-ch
+	fmt.Println("n from f1 ch:", n)
+
+	// close channel
+	close(ch)
+}
+```
+
+### Goroutines and channels
+
+```go
+package main
+
+import "fmt"
+
+func factorial(n int, ch chan int) {
+	f := 1
+	for i := 2; i <= n; i++ {
+		f *= i
+	}
+	ch <- f
+}
+
+func main() {
+	ch := make(chan int)
+	defer close(ch)
+
+	go factorial(5, ch)
+
+	// wait from the channel
+	fmt.Println(<-ch)
+
+	for i := 1; i <= 20; i++ {
+		go factorial(i, ch)
+		fmt.Println(<-ch)
+	}
+}
+```
+
+### Anonymous fanctions
+
+```go
+package main
+
+import "fmt"
+
+func factorial(n int, ch chan int) {
+	f := 1
+	for i := 2; i <= n; i++ {
+		f *= i
+	}
+	ch <- f
+}
+
+func main() {
+	ch := make(chan int)
+
+	for i := 5; i <= 15; i++ {
+		go func(n int) {
+			factorial(n, ch)
+		}(i)
+
+		fmt.Printf("%d! = %d\n", i, <-ch)
+	}
+}
+```
+
+### URL checker with channels
+
+```go
+
 ```
