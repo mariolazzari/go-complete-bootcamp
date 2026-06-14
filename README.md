@@ -5341,4 +5341,8 @@ func main() {
 go run --race main.go
 ```
 
-###
+### Mutex
+
+```go
+
+```
