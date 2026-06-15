@@ -31,7 +31,6 @@ func main() {
 		case msg2 := <-ch2:
 			fmt.Println(msg2)
 		default:
-
 			fmt.Println("No activity")
 		}
 	}

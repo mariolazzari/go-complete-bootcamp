@@ -5703,5 +5703,219 @@ func main() {
 ### Select
 
 ```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	start := time.Now()
+
+	ch1 := make(chan string)
+	ch2 := make(chan string)
+
+	go func() {
+		time.Sleep(time.Second)
+		ch1 <- "Ciao"
+	}()
+
+	go func() {
+		time.Sleep(time.Second)
+		ch2 <- "Hello"
+	}()
+
+	time.Sleep(time.Second)
+
+	// wait from multiple channels
+	for range 2 {
+		select {
+		case msg1 := <-ch1:
+			fmt.Println(msg1)
+		case msg2 := <-ch2:
+			fmt.Println(msg2)
+		default:
+			fmt.Println("No activity")
+		}
+	}
+
+	fmt.Printf("Exec time: %v\n", time.Since(start))
+}
+```
+
+## Concurrency exercises
+
+### Wait groups and mutex exercises
+
+####  Wait groups and mutex ex1
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func sayHello(n string) {
+	fmt.Printf("Hello, %s!\n", n)
+}
+
+func main() {
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		sayHello("Mr. Wick")
+	}()
+
+	wg.Wait()
+}
+```
+
+####  Wait groups and mutex ex2
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+// 1. Create a function called sum() that calculates and then prints out  the sum of 2 float numbers it receives as arguments.
+// Format the result with 2 decimal points.
+func sum(a, b float64, wg *sync.WaitGroup) {
+	defer wg.Done()
+	fmt.Printf("%.2f + %.2f = %.2f\n", a, b, a+b)
+}
+
+func main() {
+
+	// 2. From main launch 3 goroutines that execute the function you have just created (sum)
+	// 3. Synchronize the goroutines and the main function using WaitGroups
+
+	var wg sync.WaitGroup
+
+	wg.Add(3)
+
+	go sum(1, 2, &wg)
+	go sum(4, 5, &wg)
+	go sum(0, -1, &wg)
+
+	wg.Wait()
+}
+```
+
+####  Wait groups and mutex ex3
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+	"sync"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	//	1. Create an anonymous function that calculates and prints out the square root of a float value it receives as argument.
+	go func(f float64, wg *sync.WaitGroup) {
+		defer wg.Done()
+		x := math.Sqrt(f)
+		fmt.Printf("Square root of %.2f is %.4f\n", f, x)
+	}(16.1, &wg)
+
+	// 2. Launch the function as a goroutine and synchronize it with main using WaitGroups
+	wg.Wait()
+}
+```
+
+####  Wait groups and mutex ex4
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+	"sync"
+)
+
+// Change the code from Exercise #3 and launch 50 goroutines that calculate concurrently
+// the square root of all the numbers between 100 and 149 (both included).
+
+func main() {
+	var wg sync.WaitGroup
+	wg.Add(50)
+
+	for i := 100; i <= 149; i++ {
+		go func(n int, wg *sync.WaitGroup) {
+			defer wg.Done()
+			x := math.Sqrt(float64(n))
+			fmt.Printf("Square root of %d is %.4f\n", n, x)
+		}(i, &wg)
+
+	}
+	wg.Wait()
+}
+```
+
+####  Wait groups and mutex ex5
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func deposit(b *int, n int, wg *sync.WaitGroup, mx *sync.Mutex) {
+	defer wg.Done()
+
+	mx.Lock()
+	defer mx.Unlock()
+	*b += n
+	//wg.Done()
+}
+
+func withdraw(b *int, n int, wg *sync.WaitGroup, mx *sync.Mutex) {
+	defer wg.Done()
+
+	mx.Lock()
+	defer mx.Unlock()
+	*b -= n
+	// wg.Done()
+}
+
+func main() {
+	var wg sync.WaitGroup
+	var mx sync.Mutex
+
+	wg.Add(200)
+
+	balance := 100
+
+	for i := range 100 {
+		go deposit(&balance, i, &wg, &mx)
+		go withdraw(&balance, i, &wg, &mx)
+	}
+	wg.Wait()
+
+	fmt.Println("Final balance value:", balance)
+}
+```
+
+### Goroutines and channels exercises
+
+#### Goroutines and channels ex1
+
+```go
 
 ```
