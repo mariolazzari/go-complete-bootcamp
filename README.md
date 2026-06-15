@@ -5917,5 +5917,146 @@ func main() {
 #### Goroutines and channels ex1
 
 ```go
+package main
 
+import (
+	"fmt"
+	"sync"
+)
+
+func sayHello(n string) {
+	fmt.Printf("Hello, %s!\n", n)
+}
+
+func main() {
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		sayHello("Mr. Wick")
+	}()
+
+	wg.Wait()
+}
 ```
+
+#### Goroutines and channels ex2
+
+```go
+package main
+
+import "fmt"
+
+// Create a function literal (a.k.a. anonymous function)
+// that sends the string value if receives as argument
+// to main func using a channel.
+func main() {
+	ch := make(chan string)
+
+	go func() {
+		ch <- "Ciao"
+	}()
+
+	fmt.Println(<-ch)
+}
+```
+
+#### Goroutines and channels ex3
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	// c := make(<-chan int)
+	c := make(chan int)
+
+	go func(n int) {
+		c <- n
+	}(100)
+
+	fmt.Println(<-c)
+}
+```
+
+#### Goroutines and channels ex4
+
+```go
+package main
+
+import (
+	"fmt"
+	"runtime"
+	"sync"
+)
+
+// Create a goroutine named power() that has one parameter of type int,
+// calculates the square value of its parameter
+// and then sends  the result into a channel.
+func power(n int, ch chan<- int) {
+	ch <- n * n
+}
+
+func main() {
+	const jobs = 50
+	ch := make(chan int, jobs)
+
+	var wg sync.WaitGroup
+	wg.Add(jobs)
+
+	// In the main function launch 50 goroutines that calculate
+	// the square values of all numbers between 1 and 50 included.
+	for i := 1; i <= jobs; i++ {
+		go func(n int) {
+			defer wg.Done()
+			power(n, ch)
+		}(i)
+	}
+
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
+
+	fmt.Println(runtime.NumGoroutine())
+
+	// Print out the square values.
+	for val := range ch {
+		fmt.Println(val)
+	}
+}
+```
+
+#### Goroutines and channels ex5
+
+```go
+package main
+
+import "fmt"
+
+// Change the program from Exercise #4 and calculate
+// the square of all values between 1 and 50 included
+// using an anonymous function.
+
+func main() {
+	ch := make(chan int)
+
+	for i := 1; i <= 100; i++ {
+		go func(x int) {
+			ch <- x * x
+		}(i)
+	}
+
+	for i := 1; i <= 100; i++ {
+		fmt.Println(<-ch)
+	}
+}
+```
+
+## Packages and Modules
+
+### Create a Package
