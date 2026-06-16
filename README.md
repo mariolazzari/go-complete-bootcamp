@@ -6064,3 +6064,7 @@ func main() {
 ```sh
 go mod init github.com/mariolazzari/go-complete-bootcamp/numbers
 ```
+
+### Semantc versioning
+
+[semver](https://semver.org/)
