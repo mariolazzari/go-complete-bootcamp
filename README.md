@@ -6060,3 +6060,7 @@ func main() {
 ## Packages and Modules
 
 ### Create a Package
+
+```sh
+go mod init github.com/mariolazzari/go-complete-bootcamp/numbers
+```
