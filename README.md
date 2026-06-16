@@ -6068,3 +6068,10 @@ go mod init github.com/mariolazzari/go-complete-bootcamp/numbers
 ### Semantc versioning
 
 [semver](https://semver.org/)
+
+```sh
+# Create a git tag:
+git tag -a v1.0.0 -m "initial release"
+git push origin master --tags
+#Authenticating ...
+```
